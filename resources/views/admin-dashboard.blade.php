@@ -166,7 +166,7 @@
       <a href="#">🗂️ Categories</a>
       <a href="#">📈 Reports</a>
       <a href="#">🤝 Suppliers</a>
-      <a href="#">👤 Users <span class="badge">5</span></a>
+      <a href="{{ route('users.index') }}">👤 Users <span class="badge">5</span></a>
       <a href="#">⚙️ Settings</a>
       <a href="#">🚪 Logout</a>
     </nav>
@@ -396,3 +396,4 @@
   </script>
 </body>
 </html>
+s

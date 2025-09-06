@@ -4,158 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WANTUNAN NI POMPOM</title>
-<style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      color: #fff;
-    }
-    .login-container {
-      background: #1e1e1e;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0px 6px 20px rgba(0,0,0,0.4);
-      width: 100%;
-      max-width: 350px;
-      text-align: center;
-    }
-    .logo {
-      width: 80px;
-      margin-bottom: 5px;
-    }
-    .login-container h1 {
-      margin: 5px 0 25px;
-      color: #ff8c00;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .input-group {
-      margin-bottom: 18px;
-      text-align: left;
-    }
-    .input-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: #aaaaaa;
-    }
-    .input-group input {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      background: #2b2b2b;
-      color: #fff;
-      outline: none;
-      transition: all 0.3s;
-    }
-    .input-group input:focus {
-      border: 1px solid #ff8c00;
-      box-shadow: 0 0 6px rgba(255, 140, 0, 0.6);
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(to right, #ff8c00, #e67a00);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.3s;
-    }
-    button:hover {
-      box-shadow: 0 4px 12px rgba(255, 140, 0, 0.5);
-      transform: scale(1.05);
-    }
-    button:active {
-      transform: scale(0.98);
-    }
-    .forgot-password {
-        margin-top: 12px;
-    }
-    .forgot-password a {
-        font-size: 13px;
-        color: #ff8c00;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-    .forgot-password a:hover {
-        color: #e67a00;
-        text-decoration: underline;
-    }
-    .error-message {
-      color: red;
-      text-align: center;
-      margin-bottom: 15px;
-    }
 
- .toggle-eye {
-  position: absolute;
-  top: 70%;
-  right: 12px;
-  transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  pointer-events: auto;
-}
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  </style>
+  <!-- Vue CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
-<body>
-  <div class="login-container">
-    <img src="{{ asset('images/logo.png') }}" alt="Shop Logo" class="logo" />
-    <h1>WANTUNAN NI POMPOM</h1>
+<body class="bg-neutral-900 text-white min-h-screen flex items-center justify-center font-sans">
 
-    @if(session('error'))
-      <p class="error-message">{{ session('error') }}</p>
-    @endif
+  <div id="app" class="bg-neutral-800 p-10 rounded-xl shadow-2xl w-full max-w-sm text-center">
+    <img src="{{ asset('images/logo.png') }}" alt="Shop Logo" class="w-[80px] mb-2 mx-auto" />
+    <h1 class="text-orange-500 text-lg font-bold mb-6">WANTUNAN NI POMPOM</h1>
 
-    <form method="POST" action="{{ route('login.submit') }}">
+    <p v-if="errorMessage" class="text-red-500 text-sm mb-4">@{{ errorMessage }}</p>
+
+    <form method="POST" action="{{ route('login.submit') }}" class="space-y-5 text-left">
       @csrf
-      <div class="input-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter username" required />
+      <div>
+        <label for="username" class="block text-sm text-gray-400 mb-1">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Enter username"
+          required
+          class="w-full px-4 py-3 rounded-md bg-neutral-900 text-white border border-transparent focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500 transition duration-300"
+        />
       </div>
-      <div class="input-group" style="position: relative;">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter password" required />
-        <span class="toggle-eye" onclick="togglePassword()">👁️</span>
+
+      <div class="relative">
+        <label for="password" class="block text-sm text-gray-400 mb-1">Password</label>
+        <input
+          :type="showPassword ? 'text' : 'password'"
+          id="password"
+          name="password"
+          placeholder="Enter password"
+          required
+          class="w-full px-4 py-3 rounded-md bg-neutral-900 text-white border border-transparent focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500 transition duration-300"
+        />
+        <span
+          class="absolute top-1/2 right-3 transform -translate-y-1/2 text-lg cursor-pointer"
+          @click="togglePassword"
+        >
+          @{{ showPassword ? '🙈' : '👁️' }}
+        </span>
       </div>
-      <button type="submit">LOGIN</button>
-      <div class="forgot-password">
-        <a href="{{ route('password.forgot') }}">Forgot Password?</a>
+
+      <button
+        type="submit"
+        class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-md text-base hover:from-orange-600 hover:to-orange-700 hover:shadow-lg transform hover:scale-105 active:scale-95 transition duration-300"
+      >
+        LOGIN
+      </button>
+
+      <div class="text-center mt-3">
+        <a href="{{ route('password.forgot') }}" class="text-orange-500 text-sm hover:text-orange-400 hover:underline transition duration-200">
+          Forgot Password?
+        </a>
       </div>
     </form>
   </div>
 
   <script>
-    function togglePassword() {
-      const passwordInput = document.getElementById("password");
-      const eyeIcon = document.querySelector(".toggle-eye");
-      if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        eyeIcon.textContent = "🙈";
-      } else {
-        passwordInput.type = "password";
-        eyeIcon.textContent = "👁️";
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          showPassword: false,
+          errorMessage: '{{ session('error') }}' || ''
+        };
+      },
+      methods: {
+        togglePassword() {
+          this.showPassword = !this.showPassword;
+        }
       }
-    }
+    }).mount('#app');
   </script>
 </body>
 </html>
