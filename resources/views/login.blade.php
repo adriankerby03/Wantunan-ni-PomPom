@@ -59,10 +59,12 @@
       </button>
 
       <div class="text-center mt-3">
-        <a href="{{ route('password.forgot') }}" class="text-orange-500 text-sm hover:text-orange-400 hover:underline transition duration-200">
-          Forgot Password?
-        </a>
-      </div>
+  <a href="{{ route('password.request') }}" 
+     class="text-orange-500 text-sm hover:text-orange-400 hover:underline transition duration-200">
+    Forgot Password?
+  </a>
+</div>
+
     </form>
   </div>
 
